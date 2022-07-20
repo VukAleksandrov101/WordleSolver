@@ -77,7 +77,7 @@ private:
 			possibleWords.push_back(s);
 			return;
 		}
-		if(!s.length()) possibleWords.clear();
+		if (!s.length()) possibleWords.clear();
 
 		if ( green[s.length()] != -1) {
 			if (node->children[green[s.length()]] == NULL)
@@ -98,42 +98,43 @@ private:
 public:
 	string generateWord() {
 		dfs(dictionary);
-		lastGuess=possibleWords[0];
-		cout<<"green: ";
-		for(int i=0;i<5;i++) {
-			if(green[i]!=-1) cout<<(char)(green[i]+'a')<<' ';
-		}cout<<endl;
-		cout<<"yellow: ";
-		for(int i=0;i<5;i++) {
-			for(int j=0;j<26;j++) {
-				if(yellow[i][j]) cout<<(char)(j+'a')<<' ';
+		lastGuess = possibleWords[0];
+		printf("\033[1;32m");
+		cout << "green: ";
+		for (int i = 0; i < 5; i++) {
+			if (green[i] != -1) cout << (char)(green[i] + 'a') << ' ';
+		} cout << endl;
+		printf("\033[1;33m");
+		cout << "yellow: ";
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 26; j++) {
+				if (yellow[i][j]) cout << (char)(j + 'a') << ' ';
 			}
-		}cout<<endl;
-		cout<<"none: ";
-		for(int i=0;i<26;i++) {
-			if(none[i]) cout<<(char)(i+'a')<<' ';
+		} cout << endl;
+		printf("\033[0m");
+		cout << "none: ";
+		for (int i = 0; i < 26; i++) {
+			if (none[i]) cout << (char)(i + 'a') << ' ';
 		}
-		cout<<"Possible words: ";
-		for(string s:possibleWords) cout<<s<<", ";
-		cout<<endl;
+		cout << "Possible words: ";
+		for (string s : possibleWords) cout << s << ", ";
+		cout << endl;
 		return lastGuess;
 	}
 
 	void addInfo(const string& info) {
-		for(int i=0;i<WORD_LEN;i++) {
-			if(info[i]=='g')
-				green[i]=lastGuess[i]-'a';
-			else if(info[i]=='y')
-				yellow[i][lastGuess[i]-'a']=true;
+		for (int i = 0; i < WORD_LEN; i++) {
+			if (info[i] == 'g')
+				green[i] = lastGuess[i] - 'a';
+			else if (info[i] == 'y')
+				yellow[i][lastGuess[i] - 'a'] = true;
 			else {
-				bool seen=false;
-				for(int j=0;j<i;j++){
-					if(yellow[j][lastGuess[i]-'a']) {
-						seen=true;
-						break;
+				for (int j = 0; j < i; j++) {
+					if (yellow[j][lastGuess[i] - 'a']) {
+						return;
 					}
 				}
-				if(!seen) none[lastGuess[i]-'a']=true;	
+				none[lastGuess[i] - 'a'] = true;
 			}
 		}
 	}
@@ -143,7 +144,7 @@ int main() {
 	WordGenerator wordGenerator;
 
 	for (int i = 0; i < GUESS_CNT; i++) {
-		cout << wordGenerator.generateWord()<<'\n';
+		cout << wordGenerator.generateWord() << '\n';
 		string info;
 		cin >> info;
 		wordGenerator.addInfo(info);
